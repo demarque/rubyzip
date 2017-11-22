@@ -182,12 +182,7 @@ module Zip
       end
 
       def read_c_dir_entry(io) #:nodoc:all
-        path = if io.respond_to?(:path)
-                 io.path
-               else
-                 io
-               end
-        entry = new(path)
+        entry = new(io)
         entry.read_c_dir_entry(io)
         entry
       rescue Error
@@ -490,7 +485,7 @@ module Zip
 
     # Returns an IO like object for the given ZipEntry.
     # Warning: may behave weird with symlinks.
-    def get_input_stream(archive = nil, &block)
+    def get_input_stream(&block)
       if @ftype == :directory
         yield ::Zip::NullInputStream if block_given?
         ::Zip::NullInputStream
@@ -508,7 +503,7 @@ module Zip
         end
       else
         cd_entry = self
-        zis = ::Zip::InputStream.new(archive || @zipfile, cd_entry, local_header_offset)
+        zis = ::Zip::InputStream.new(@zipfile, cd_entry, local_header_offset)
         zis.instance_variable_set(:@internal, true)
         zis.get_next_entry
         if block_given?

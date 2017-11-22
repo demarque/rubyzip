@@ -62,8 +62,6 @@ module Zip
     # Returns the zip files comment, if it has one
     attr_accessor :comment
 
-    attr_accessor :archive
-
     # Opens a zip archive. Pass true as the second parameter to create
     # a new archive if it doesn't exist already.
     def initialize(file_name, create = false, buffer = false, options = {})
@@ -74,8 +72,8 @@ module Zip
       if !buffer && ::File.size?(file_name)
         @create = false
         @file_permissions = ::File.stat(file_name).mode
-        @archive = ::File.open(name, 'rb')
-        read_from_stream(@archive)
+        archive = ::File.open(name, 'rb')
+        read_from_stream(archive)
       elsif @create
         @entry_set = EntrySet.new
       elsif ::File.zero?(file_name)
