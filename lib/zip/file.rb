@@ -72,9 +72,8 @@ module Zip
       if !buffer && ::File.size?(file_name)
         @create = false
         @file_permissions = ::File.stat(file_name).mode
-        ::File.open(name, 'rb') do |f|
-          read_from_stream(f)
-        end
+        archive = ::File.open(name, 'rb')
+        read_from_stream(archive)
       elsif @create
         @entry_set = EntrySet.new
       elsif ::File.zero?(file_name)
