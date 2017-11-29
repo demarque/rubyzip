@@ -182,7 +182,12 @@ module Zip
       end
 
       def read_c_dir_entry(io) #:nodoc:all
-        entry = new(io)
+        path = if io.respond_to?(:path)
+                 io.path
+               else
+                 io
+               end
+        entry = new(path)
         entry.read_c_dir_entry(io)
         entry
       rescue Error
