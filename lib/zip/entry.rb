@@ -233,7 +233,7 @@ module Zip
 
       # overwrite size, compressed_size and crc with those of the file headers of the central directory
       # when local file headers are not found in the beginning of the file
-      if cd_entry && gp_flags & 8 == 8 && size == 0 && crc == 0 && compressed_size == 0
+      if cd_entry && gp_flags & 8 == 8 && crc == 0 && compressed_size == 0
         @size             = cd_entry.size
         @crc              = cd_entry.crc
         @compressed_size  = cd_entry.compressed_size
